@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
 @Controller
@@ -28,9 +29,11 @@ public class CommunityController {
     }
 
     @GetMapping("/read")
-    public void read(long idx, @ModelAttribute("page") int page,Model model){
-        model.addAttribute("vo",service.read(idx));
-        model.addAttribute("cmtlist",service.commentsList(idx));
+    public void read(long idx, @ModelAttribute("page") int page, Model model, HttpServletRequest request){
+        String remoteAddr = request.getRemoteAddr();
+        model.addAttribute("remoteAddr", remoteAddr);
+        model.addAttribute("vo", service.read(idx));
+        model.addAttribute("cmtlist", service.commentsList(idx));
     }
 
     @GetMapping("/write")
@@ -71,18 +74,22 @@ public class CommunityController {
     }
 
     @PostMapping("/comments")
-    public String comments(int page, int f, CommunityComments dto, RedirectAttributes redirectAttributes){
-        service.comments(dto,f);
-        redirectAttributes.addAttribute("page",page);
-        redirectAttributes.addAttribute("idx",dto.getMref());
+    public String comments(int page, int f, CommunityComments dto,
+                           RedirectAttributes redirectAttributes) {
+        service.comments(dto, f);
+        redirectAttributes.addAttribute("page", page);
+        redirectAttributes.addAttribute("idx", dto.getMref());
 
         String message = null;
-        if(f==1)message = "댓글 등록 하였습니다.";
-        else if(f==2)message = "댓글 삭제 하였습니다";
-
-        redirectAttributes.addFlashAttribute("message",message);
+        if (f == 1) {
+            message = "댓글 등록 하였습니다.";
+        } else if (f == 2) {
+            message = "댓글 삭제 하였습니다.";
+        }
+        redirectAttributes.addFlashAttribute("message", message);
 
         return "redirect:/community/read";
     }
+
 
 }

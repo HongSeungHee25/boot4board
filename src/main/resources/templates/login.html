@@ -45,11 +45,16 @@
                 onclick="location.href='${pageContext.request.contextPath}'">HOME</button>
     </form>
 </div>
-<script type="text/javascript">
-    if('${message}'.length !=0) alert('${message}');
+<script type="text/javascript" th:inline ="javascript">
     console.log('${incorrect}')
     if('${incorrect}'==='y')
-        document.getElementById('incorrect').style.display='inline-block'
+        document.getElementById('incorrect').style.display='inline-block';
+
+    const message = [[${alert}]];
+    //객체(문자열 포함) 검사합니다. 양쪽에 '' 안에 넣으면 값이 없을떄 'null'
+
+    if(message !==null)
+        alert(message);
 </script>
 
 </body>

@@ -1,11 +1,26 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>타임리프 샘플</title>
+    <title>main</title>
 </head>
 <body>
-<a href="sample/hello">go hello</a>
-
+<header>
+    <h3>환영합니다.</h3>
+    <hr/>
+</header>
+<nav>
+    <!-- "user" 라는 이름의 애트리뷰트 가져오기 -->
+    <div th:if="${session.user != null}">
+        <h4 th:text="${session.user.name}+'님 환영합니다.'"></h4>
+        <p><a th:href="@{/logout}">로그아웃</a></p>
+    </div>
+    <div th:if="${session.user == null}">
+        <p><a th:href="@{/login}">로그인</a></p>
+        <p><a th:href="@{/member/join}">회원가입</a></p>
+    </div>
+    <p><a th:href="@{/community/list}">커뮤니티</a></p>
+</nav>
+<hr>
 </body>
 </html>
