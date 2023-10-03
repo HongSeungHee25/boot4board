@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <title>회원수정</title>
 </head>
 <body>
+<h2>회원 수정</h2>
+<h4 th:text="${session.user.name}+'님 회원 정보 수정 페이지입니다.'"></h4>
+<form action="updatesave" method="post">
+    <input type="text" name="id" th:value="${session.user.id }">
+    <input type="text" name="name" th:value="${session.user.name }">
+    <input type="text" name="email" th:value="${session.user.email }">
+    <input type="number" name="age" th:value="${session.user.age }">
+    <input type="text" name="password" th:value="${session.user.password}">
+    <button>수정</button>  <!-- button 의 기본 type="submit" 은 입력데이터를 action url로 제출하기-->
+</form>
+<button type="button" onclick="location.href='list'">목록</button>
 
+<a href="../">홈</a>
 </body>
 </html>

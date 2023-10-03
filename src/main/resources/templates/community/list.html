@@ -43,21 +43,27 @@
             </th:block>
         </ul>
         <div style="float:right;margin:40px;">
-            <a th:href="@{'write?page=' + ${paging.currentPage}}" class="button">글쓰기</a>
-            <a th:href="${#servletContext.contextPath}" class="button">홈</a>
+            <th:block th:if="${session.user != null}">
+            <!--<a th:href="@{'write?page=' + ${paging.currentPage}}" class="button">글쓰기</a>-->
+            <a th:href="'javascript:write('+${paging.currentPage}+')'" class="button">글쓰기</a>
+            </th:block>
+            <th:block th:if="${session.user == null}">
+            <a href="../login" class="button">로그인</a>
+            </th:block>
+
+            <a href='http://localhost:8085/' class="button">홈</a>
         </div>
     </div>
 
 <script type="text/javascript">
     /*if('${message}'.length !=0) alert('${message}');*/
-
-    function write() {
+    function write(currentPage) {
         let yn
-        if('${user.id}'==''){  /* 로그인여부 검사: user는 session 에 저장된 애트리뷰트 */
+        if('${session.user }'==''){  /* 로그인여부 검사: user는 session 에 저장된 애트리뷰트 */
             yn=confirm('글쓰기는 로그인이 필요합니다. 로그인 하시겠습니까?')
             if(yn) location.href='../login?back=w'  // 로그인 후 글쓰기 url로 redirect 하기 위한 파라미터
         }else{
-            location.href='write?page=${paging.currentPage }'
+            location.href='write?page='+currentPage
         }
     }
 </script>

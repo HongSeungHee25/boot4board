@@ -14,6 +14,7 @@
     <div th:if="${session.user != null}">
         <h4 th:text="${session.user.name}+'님 환영합니다.'"></h4>
         <p><a th:href="@{/logout}">로그아웃</a></p>
+        <p><a th:href="@{/member/update}">정보 수정</a></p>
     </div>
     <div th:if="${session.user == null}">
         <p><a th:href="@{/login}">로그인</a></p>

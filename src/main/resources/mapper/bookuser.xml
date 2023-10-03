@@ -17,5 +17,18 @@
 		VALUES(#{id} , #{name} , #{email} , #{age}, sysdate , #{password})
 	</insert>
 
+	<update id="update" parameterType="BookUser">
+		UPDATE bookuser
+		SET
+			email=#{email}, password=#{password}
+		WHERE
+			id=#{id}
+	</update>
+
+	<select id="selectById" parameterType="String" resultType="BookUser">
+		select *
+		from bookuser
+		where id=#{id}
+	</select>
 </mapper>
  

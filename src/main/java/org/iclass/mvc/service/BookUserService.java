@@ -22,5 +22,11 @@ public class BookUserService {
 	public int join(BookUser dto) {
 		return dao.join(dto);
 	}
-	
+
+	public int update(BookUser dto){
+		return dao.update(dto);
+	}
+	public BookUser selectById(String id){
+		return dao.selectById(id);
+	}
 }

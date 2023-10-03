@@ -41,9 +41,11 @@ public class CommunityController {
 
     }
     @PostMapping("/write")
-    public String save(Community dto, RedirectAttributes redirectAttributes){
+    public String save(Community dto, RedirectAttributes redirectAttributes,HttpServletRequest request){
         service.insert(dto);
 
+        String remoteAddr = request.getRemoteAddr();
+        redirectAttributes.addAttribute("remoteAddr", remoteAddr);
         redirectAttributes.addFlashAttribute("message","글 등록이 완료되었습니다.");
         return "redirect:/community/list";
     }
@@ -53,9 +55,11 @@ public class CommunityController {
     }
 
     @PostMapping("/save")
-    public String updateSave(int page, Community vo, RedirectAttributes redirectAttributes){
+    public String updateSave(int page, Community vo, RedirectAttributes redirectAttributes,HttpServletRequest request){
         service.update(vo);
 
+        String remoteAddr = request.getRemoteAddr();
+        redirectAttributes.addAttribute("remoteAddr", remoteAddr);
         redirectAttributes.addAttribute("idx",vo.getIdx());
         redirectAttributes.addAttribute("page",page);
         redirectAttributes.addFlashAttribute("message","글 수정이 완료되었습니다.");
