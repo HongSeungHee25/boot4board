@@ -11,6 +11,6 @@ public interface BookuserMapper {
 
 	BookUser login(Map<String, String> map);
 	int join(BookUser dto);
-	int update(BookUser dto);
-	BookUser selectById(String id);
+	int update(BookUser vo);
+	BookUser selectId(String id);
 }

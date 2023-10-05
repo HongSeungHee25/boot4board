@@ -1,5 +1,7 @@
 package org.iclass.mvc.dto;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 
 
@@ -42,5 +44,33 @@ public class PageRequestDTO {
 		//String "tc" 와 같이 view 에서 받은 파라미터 값은 배열로 변경
 		if (type != null && !type.isEmpty() && !type.equals("a"))		//type="a" 를 전체로 할 예정.
 			types = type.split("");			//"tc" 를 new String[]{"t", "c"} 로 변환합니다.
+	}
+	//글 읽기, 글 수정, 글 삭제 등에 페이지 번호와 검색 파라미터를 url 에 계속 데리고 다녀야 합니다.
+	//이를 위해서 문자열 생성 메소드 정의합니다.
+	private String link;		//url 에 들어갈 파라미터 문자열
+
+	//Getter 는 처리 코드가 필요하여 직접 작성합니다.
+	public String getLink(){
+
+		if(link == null){
+			StringBuilder builder = new StringBuilder();
+			builder.append("page="+this.page);
+			if(this.type!=null && this.type.length() > 0 && this.keyword != null){
+				builder.append("&type="+this.type);
+				try {
+					builder.append("&keyword="+ URLEncoder.encode(this.keyword, "UTF-8"));
+					//키워드는 한글 등 다국어 문자일 경우 인코딩이 필요합니다.
+				}catch (UnsupportedEncodingException e){
+
+				}
+			}
+			if(this.from != null && this.to != null){
+				builder.append("&from="+this.from);
+				builder.append("&to="+this.to);
+			}
+			this.link= builder.toString();
+		}
+		return this.link;
+		//최종 link 는 EX : page=3&type=tc&keyword=hi&from=2023-03-01&to=2023-03-31
 	}
 }

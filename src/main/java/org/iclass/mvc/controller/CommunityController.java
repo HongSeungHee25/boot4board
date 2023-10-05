@@ -34,18 +34,24 @@ public class CommunityController {
     public void pagelist(PageRequestDTO pageRequestDTO, Model model){
         PageResponseDTO responseDTO =  service.listWithSearch(pageRequestDTO);
         //list.html 에 전달한 model 관련 코드 작성. list.html 도 완성하기. 레이아웃도 적용 하기
-        model.addAttribute("list",service.pagelist(pageRequestDTO));
+//        model.addAttribute("list",service.pagelist(pageRequestDTO));
         model.addAttribute("paging",responseDTO);
         model.addAttribute("page",pageRequestDTO.getPage());
         model.addAttribute("today", LocalDate.now());
     }
 
-    @GetMapping("/read")
-    public void read(long idx, @ModelAttribute("page") int page, Model model, HttpServletRequest request){
+   /* @GetMapping("/read")
+    public void read(long idx, @ModelAttribute("page") int page,PageRequestDTO pageRequestDTO, Model model, HttpServletRequest request){
         String remoteAddr = request.getRemoteAddr();
         model.addAttribute("remoteAddr", remoteAddr);
         model.addAttribute("vo", service.read(idx));
         model.addAttribute("cmtlist", service.commentsList(idx));
+    }*/
+
+    @GetMapping("/read")
+    public void read(PageRequestDTO pageRequestDTO, long idx,Model model){
+        Community community = service.read(idx);
+        model.addAttribute("dto",community);
     }
 
     @GetMapping("/write")
@@ -58,23 +64,23 @@ public class CommunityController {
 
         String remoteAddr = request.getRemoteAddr();
         redirectAttributes.addAttribute("remoteAddr", remoteAddr);
-        redirectAttributes.addFlashAttribute("message","글 등록이 완료되었습니다.");
+        redirectAttributes.addFlashAttribute("alert","글 등록이 완료되었습니다.");
         return "redirect:/community/list";
     }
-    @PostMapping("/update")
-    public void update(long idx, @ModelAttribute("page")int page, Model model){
+    @GetMapping("/update")
+    public void update(PageRequestDTO pageRequestDTO,long idx, @ModelAttribute("page")int page, Model model){
         model.addAttribute("vo",service.selectByIdx(idx));
     }
 
     @PostMapping("/save")
-    public String updateSave(int page, Community vo, RedirectAttributes redirectAttributes,HttpServletRequest request){
+    public String updateSave(PageRequestDTO pageRequestDTO,int page, Community vo, RedirectAttributes redirectAttributes,HttpServletRequest request){
         service.update(vo);
 
         String remoteAddr = request.getRemoteAddr();
         redirectAttributes.addAttribute("remoteAddr", remoteAddr);
         redirectAttributes.addAttribute("idx",vo.getIdx());
         redirectAttributes.addAttribute("page",page);
-        redirectAttributes.addFlashAttribute("message","글 수정이 완료되었습니다.");
+        redirectAttributes.addFlashAttribute("alert","글 수정이 완료되었습니다.");
 
         return "redirect:/community/read";
     }
@@ -84,7 +90,7 @@ public class CommunityController {
         service.delete(idx);
 
         redirectAttributes.addAttribute("page",page);
-        redirectAttributes.addFlashAttribute("message","글 삭제가 완료되었습니다.");
+        redirectAttributes.addFlashAttribute("alert","글 삭제가 완료되었습니다.");
 
         return "redirect:/community/list";
     }
@@ -96,13 +102,13 @@ public class CommunityController {
         redirectAttributes.addAttribute("page", page);
         redirectAttributes.addAttribute("idx", dto.getMref());
 
-        String message = null;
+        String alert = null;
         if (f == 1) {
-            message = "댓글 등록 하였습니다.";
+            alert = "댓글 등록 하였습니다.";
         } else if (f == 2) {
-            message = "댓글 삭제 하였습니다.";
+            alert = "댓글 삭제 하였습니다.";
         }
-        redirectAttributes.addFlashAttribute("message", message);
+        redirectAttributes.addFlashAttribute("alert", alert);
 
         return "redirect:/community/read";
     }
