@@ -31,16 +31,19 @@ public class LoginController {
         BookUser member = service.login(param);
         if(member==null){
             reattr.addFlashAttribute("incorrect","y");
+            reattr.addFlashAttribute("result","로그인 실패");
             url="login";
         }else{
             model.addAttribute("user",member);
+            reattr.addFlashAttribute("result","로그인 성공 !! "+member.getName()+"님 환영합니다.");
         }
         return "redirect:"+url;
     }
 
     @GetMapping("logout")
-    public String logout(SessionStatus session){
+    public String logout(SessionStatus session, RedirectAttributes redirectAttributes){
         session.setComplete();
+        redirectAttributes.addFlashAttribute("result","로그아웃 되었습니다.");
         return "redirect:/";
     }
 

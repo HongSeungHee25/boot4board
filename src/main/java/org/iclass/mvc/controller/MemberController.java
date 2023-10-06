@@ -29,7 +29,7 @@ public class MemberController {
     @PostMapping("/save")
     public String join(BookUser dto, RedirectAttributes redirectAttributes){
         service.join(dto);
-        redirectAttributes.addFlashAttribute("alert","회원가입이 완료되었습니다.");
+        redirectAttributes.addFlashAttribute("result","회원가입이 완료되었습니다.");
 
         return "redirect:/login";
     }
@@ -41,7 +41,7 @@ public class MemberController {
     @PostMapping("/update")
     public String save(BookUser vo,RedirectAttributes redirectAttributes){
         service.update(vo);
-        redirectAttributes.addFlashAttribute("alert","회원정보 수정이 완료되었습니다.");
+        redirectAttributes.addFlashAttribute("result","회원정보 수정이 완료되었습니다.");
 
         return "redirect:/";
     }

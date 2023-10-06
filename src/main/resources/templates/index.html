@@ -32,13 +32,35 @@
 <a href="sample/spring?name=momo&age=23">go spring2</a><br>
 <a href="sample/spring?title=하이&writer=momo">go spring3</a><br>
 <a href="sample/spring?title=하이&writer=momo&name=momo&age=23">go spring4</a><br>
-    <script layout:fragment="script" th:inline="javascript">
-        const message = [[${alert}]];
-        //객체(문자열 포함) 검사합니다. 양쪽에 '' 안에 넣으면 값이 없을떄 'null'
+    <!--modal -->
+    <div class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">My Board</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <!--  <button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script layout:fragment="script" th:inline="javascript">
+    //수정 완료 메시지
+    const result = [[${result}]]
+    const modal = new bootstrap.Modal(document.querySelector(".modal"))
+    if(result) {         //result  model 값이 전달된 것이 있으면 참.
+        document.querySelector('#message').innerHTML = result
+        modal.show();
+    }
 
-        if(message)
-            alert(message)
-    </script>
+</script>
 </div>
 </body>
 </html>

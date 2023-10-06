@@ -11,13 +11,13 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    Welcome! Community - Update
+                    커뮤니티 글 수정
                 </div>
                 <div class="card-body">
                     <form name="frm1" method="post" action="save" >
                         <input type="hidden" name="idx" th:value="${vo.idx }">
                         <input type="hidden" name="page" th:value="${page}">
-                        <input type="hidden" name="ip" th:value="${remoteAddr }">
+                        <input type="hidden" name="ip" th:value="${#httpServletRequest.remoteAddr}">
                         <div class="input-group mb-3">
                             <span class="input-group-text col-2">제목</span>
                             <input class="form-control" type="text" name="title" size="50"
@@ -35,37 +35,59 @@
                             <span class="input-group-text col-2">내용</span>
                             <textarea name="content" class="form-control" rows="15" style="resize: none;" th:text="${vo.content }" required></textarea>
                         </div>
-                        <div class="float-end">
+                        <div class="float-end" th:with="link=${pageRequestDTO.link}">
                             <button  class="btn btn-secondary" type="button" onclick="isValid()">저장</button>
                             <button  class="btn btn-primary" type="reset">다시쓰기</button>
-                            <a class="btn btn-primary" th:href="@{'list?page=' + ${page}}">목록</a>
+                            <a class="btn btn-primary" th:href="|@{/community/list(idx=${vo.idx})}&${link}|">목록</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-                <script layout:fragment="script" th:inline="javascript">
-                    function isValid(){
-                        let result = true			//유효성 검사 결과 저장
-                        const content = document.forms[0].content		//input 요소 지정
-                        if(content.value == '') {
-                            alert('글 내용 작성은 필수 입니다.')
-                            result = false
-                            content.focus()
-                        }
+    <!--modal -->
+    <div class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">My Board</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <!--  <button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script layout:fragment="script" th:inline="javascript">
+    //수정 완료 메시지
+    const result = [[${result}]]
+    const modal = new bootstrap.Modal(document.querySelector(".modal"))
+    if(result) {         //result  model 값이 전달된 것이 있으면 참.
+        document.querySelector('#message').innerHTML = result
+        modal.show();
+    }
 
-                        if(result) {
-                            document.forms[0].submit()
-                        }
-                    }
-                    //유효성 검사를 위해서 저장 버튼 타입을 submit 으로 두는 방법도 있습니다.
-                    //그럴 때는 form 태그에 onsubmit="return isValid()"    => isValid 함수 실행한 리턴이 true 일때만 submit 합니다.
-                    const message = [[${alert}]];
-                    //객체(문자열 포함) 검사합니다. 양쪽에 '' 안에 넣으면 값이 없을떄 'null'
+    function isValid(){
+        let result = true			//유효성 검사 결과 저장
+        const content = document.forms[0].content		//input 요소 지정
+        if(content.value == '') {
+            alert('글 내용 작성은 필수 입니다.')
+            result = false
+            content.focus()
+        }
 
-                    if(message)
-                        alert(message)
-                </script>
+        if(result) {
+            document.forms[0].submit()
+        }
+    }
+    //유효성 검사를 위해서 저장 버튼 타입을 submit 으로 두는 방법도 있습니다.
+    //그럴 때는 form 태그에 onsubmit="return isValid()"    => isValid 함수 실행한 리턴이 true 일때만 submit 합니다.
+</script>
             </div>
 </html>
