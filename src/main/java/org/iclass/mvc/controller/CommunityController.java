@@ -117,6 +117,10 @@ public class CommunityController {
 
         return "redirect:/community/read";
     }
+    @GetMapping("/indextest")
+    public String indextest(){
+        return "indextest";
+    }
 
 
 }
